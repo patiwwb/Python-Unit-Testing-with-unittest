@@ -1,10 +1,12 @@
 import unittest
 from unittest.mock import patch
 from employee import Employee
-
+import sys
 
 class TestEmployee(unittest.TestCase):
 
+    a = 1 
+    b = 2 
 
     """setUpClass run once at the beginning of all tests"""
     @classmethod
@@ -71,6 +73,34 @@ class TestEmployee(unittest.TestCase):
             mocked_get.assert_called_with('http://company.com/Smith/June')
             self.assertEqual(schedule, 'Bad Response!')
 
+    """we can skip a test"""
+    @unittest.skip("demonstrating skipping")
+    def test_nothing(self):
+        self.fail("shouldn't happen")
 
+    @unittest.skipIf(b>a, "Skip over this routine")
+    def test_1(self):
+        print('test_1')
+        self.assertTrue(self.emp_1.pay == 50000)
+    
+    @unittest.skipUnless(b == 0, "Skip over this routine")
+    def test_2(self):
+      print('test_2')
+      result = self.emp_1.pay
+      self.assertTrue(result == 50000)
+      
+    @unittest.skipUnless(sys.platform.startswith("win"), "requires Windows")
+    def test_windows_support(self):
+        print('test_windows')
+        # windows specific testing code
+        pass
+    
+    @unittest.expectedFailure
+    def test_3(self):
+      print('test_3')
+      result = 1*2
+      self.assertEqual(1, 0, "broken")
+    
 if __name__ == '__main__':
-    unittest.main()
+    #unittest.main()
+    unittest.main(verbosity=2)
